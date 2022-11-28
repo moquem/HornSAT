@@ -21,7 +21,12 @@ let handle_file : string -> unit = fun fname ->
         begin
           match S.solve p with
           | None -> Format.printf "false@."
-          | Some lvar -> pretty_print lvar; Format.printf "true@."
+          | Some lvar -> 
+            let l = ref lvar in
+              for i=1 to p.nb_var do
+                if not(List.mem i lvar) && not(List.mem (-i) lvar) then l := i::!l
+              done;
+          pretty_print !l; Format.printf "true@."
         end
       | 1 -> 
         begin

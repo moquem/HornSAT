@@ -21,11 +21,17 @@ let handle_file : string -> unit = fun fname ->
         begin
           match S.solve p with
           | None -> Format.printf "false@."
-          | Some _ -> Format.printf "true@."
+          | Some lvar -> pretty_print lvar; Format.printf "true@."
         end
       | 1 -> 
         begin
           match S.solve_xnf p with
+          | None -> Format.printf "false@."
+          | Some lvar -> pretty_print lvar; Format.printf "true@."
+        end
+      | 2 -> 
+        begin
+          match S.solve_hs p with
           | None -> Format.printf "false@."
           | Some lvar -> pretty_print lvar; Format.printf "true@."
         end

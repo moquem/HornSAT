@@ -12,6 +12,7 @@ end
 module type SOLVER = sig
   val solve : Ast.t -> Ast.model option
   val solve_xnf : Ast.t -> Ast.model option
+  val solve_hs : Ast.t -> Ast.model option
 end
 
 module DPLL(C:CHOICE) : SOLVER =
@@ -86,6 +87,9 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
 
   (********************** Projet LOGIA 1  **********************)
 
+
+  (* XNF *)
+
   and solve_xnf : Ast.t -> Ast.model option = fun p -> 
   
     if Cnf.is_empty p.cnf then Some []
@@ -134,41 +138,77 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
                       end
     ) 
 
-    and conflit = function
-    | [] -> false
-    | h::q when List.mem (-h) q -> true
-    | _::q -> conflit q
+  and conflit = function
+  | [] -> false
+  | h::q when List.mem (-h) q -> true
+  | _::q -> conflit q
 
-    and remove_lvar_clause_xnf lvar formula = match lvar with
-      | [] -> formula
-      | h::q -> remove_lvar_clause_xnf q (Cnf.map (Clause.remove (-h)) formula)
-    
-    and clean_assigned_lvar_xnf lvar cl = 
-      if Clause.cardinal cl <> 1 then cl
-      else 
-        match lvar with
-        | [] -> cl
-        | h::q when Clause.mem h cl -> Clause.empty
-        | _::q -> clean_assigned_lvar_xnf q cl
-
-    and remove_assigned_var_xnf var cl = 
-      if Clause.cardinal cl = 1 && Clause.mem var cl then Clause.empty
-      else 
-        if Clause.cardinal cl > 1 && Clause.mem var cl then 
-          let new_cl = Clause.remove var cl in
-            let elt = Clause.choose new_cl in
-              let new_new_cl = Clause.remove elt new_cl in
-                Clause.add (-elt) new_new_cl
-        else
-          cl
-    
-    and remove_assigned_lvar_xnf lvar cl = match lvar with
+  and remove_lvar_clause_xnf lvar formula = match lvar with
+    | [] -> formula
+    | h::q -> remove_lvar_clause_xnf q (Cnf.map (Clause.remove (-h)) formula)
+  
+  and clean_assigned_lvar_xnf lvar cl = 
+    if Clause.cardinal cl <> 1 then cl
+    else 
+      match lvar with
       | [] -> cl
-      | h::q -> remove_assigned_lvar_xnf q (remove_assigned_var_xnf h cl)
+      | h::q when Clause.mem h cl -> Clause.empty
+      | _::q -> clean_assigned_lvar_xnf q cl
 
-    and pretty_print = function
-      | [] -> print_string "\n"
-      | h::q -> print_int h; pretty_print q
+  and remove_assigned_var_xnf var cl = 
+    if Clause.cardinal cl = 1 && Clause.mem var cl then Clause.empty
+    else 
+      if Clause.cardinal cl > 1 && Clause.mem var cl then 
+        let new_cl = Clause.remove var cl in
+          let elt = Clause.choose new_cl in
+            let new_new_cl = Clause.remove elt new_cl in
+              Clause.add (-elt) new_new_cl
+      else
+        cl
+  
+  and remove_assigned_lvar_xnf lvar cl = match lvar with
+    | [] -> cl
+    | h::q -> remove_assigned_lvar_xnf q (remove_assigned_var_xnf h cl)
+
+  and pretty_print = function
+    | [] -> print_string "\n"
+    | h::q -> print_int h; pretty_print q
+
+  
+
+  (* HornSAT *)
+
+  and solve_hs : Ast.t -> Ast.model option = fun p ->
+    if Cnf.is_empty p.cnf then Some []
+    else 
+      let var_val = Array.make (p.nb_var+1) (-1) and l = ref [] and horn = ref p.cnf and sat = ref true in
+        while !sat && Cnf.exists (fun elt -> Clause.cardinal elt = 1) !horn do
+          let l_sgl = ref [] in
+          Cnf.iter (fun elt -> if Clause.cardinal elt = 1 then
+                                  let var = Clause.choose elt in 
+                                    if var < 0 then 
+                                      begin
+                                        if var_val.(-var) = -1  then (var_val.(-var) <- 0; l_sgl := var::(!l_sgl))
+                                        else if var_val.(-var) = 1 then sat := false
+                                      end
+                                    else 
+                                      begin
+                                        if var_val.(var) = -1  then (var_val.(var) <- 1; l_sgl := var::(!l_sgl))
+                                        else if var_val.(var) = 0 then sat := false
+                                      end
+                                      ) !horn;
+          horn := remove_lvar_clause !l_sgl !horn;
+          l := !l_sgl@(!l);
+          if Cnf.exists (Clause.is_empty) !horn then sat := false
+        done;
+        if not(!sat) then None
+        else 
+          begin
+            for i=1 to p.nb_var do
+              if var_val.(i) = -1 then l := (-i)::(!l)
+            done;
+            Some !l
+          end
 
   
 end

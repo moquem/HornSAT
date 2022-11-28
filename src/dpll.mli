@@ -10,6 +10,7 @@ module type SOLVER = sig
       a model that satisfies the formula. *)
   val solve : Ast.t -> Ast.model option
   val solve_xnf : Ast.t -> Ast.model option
+  val solve_hs : Ast.t -> Ast.model option
 
 end
 

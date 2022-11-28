@@ -96,21 +96,17 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
       (* Balaie la CNF pour enlever tous les singletons *)
       while Cnf.exists (fun x -> (Clause.cardinal x) = 1) !xnf do
       let l = List.map (fun elt -> Clause.choose elt) (Cnf.elements (Cnf.filter (fun elt -> (Clause.cardinal elt) = 1) !xnf)) in 
-      l_sgl := l@(!l_sgl); xnf := remove_lvar_clause_xnf l !xnf
+      l_sgl := l@(!l_sgl); xnf := remove_lvar_clause_xnf l !xnf; xnf := Cnf.map (clean_assigned_lvar_xnf l) !xnf
       done;
       (* Avec remove_lvar_clause_xnf on supprime les occurences des variables à 0 *)
 
-      let xnf1 = Cnf.filter (fun elt -> not(Clause.is_empty elt)) !xnf in
-
-      (* Vérifie si lors de l'assignation des singletons, il n'y a pas eu de conflits, à savoir assignation impossible.
-      Si il y a des clauses vides, ça veut dire qu'il y avait une clause avec que 0. *)
-
-      if Cnf.cardinal !xnf <> Cnf.cardinal xnf1 then None
+      (* On regarde s'il y a un conflit *)
+      if conflit !l_sgl then None
       else
 
       (* On veut nettoyer les variables déjà assignées en utilisant la régle A xor 1 = neg A et neg (A xor B) = neg A xor B *)
 
-      let cleaned_xnf = Cnf.filter (fun elt -> not(Clause.is_empty elt)) (Cnf.map (remove_assigned_lvar_xnf !l_sgl) xnf1) in
+      let cleaned_xnf = Cnf.filter (fun elt -> not(Clause.is_empty elt)) (Cnf.map (remove_assigned_lvar_xnf !l_sgl) !xnf) in
 
       match Cnf.choose_opt cleaned_xnf with
         | None -> Some !l_sgl (* La CNF est vide, donc satisfiable *)
@@ -138,10 +134,23 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
                       end
     ) 
 
+    and conflit = function
+    | [] -> false
+    | h::q when List.mem (-h) q -> true
+    | _::q -> conflit q
+
     and remove_lvar_clause_xnf lvar formula = match lvar with
       | [] -> formula
       | h::q -> remove_lvar_clause_xnf q (Cnf.map (Clause.remove (-h)) formula)
     
+    and clean_assigned_lvar_xnf lvar cl = 
+      if Clause.cardinal cl <> 1 then cl
+      else 
+        match lvar with
+        | [] -> cl
+        | h::q when Clause.mem h cl -> Clause.empty
+        | _::q -> clean_assigned_lvar_xnf q cl
+
     and remove_assigned_var_xnf var cl = 
       if Clause.cardinal cl = 1 && Clause.mem var cl then Clause.empty
       else 
@@ -156,6 +165,10 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
     and remove_assigned_lvar_xnf lvar cl = match lvar with
       | [] -> cl
       | h::q -> remove_assigned_lvar_xnf q (remove_assigned_var_xnf h cl)
+
+    and pretty_print = function
+      | [] -> print_string "\n"
+      | h::q -> print_int h; pretty_print q
 
   
 end

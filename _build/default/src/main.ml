@@ -8,26 +8,26 @@ let mode = ref Cnf
 (** Default solver. By doing the third part of the project, you might come with other solvers *)
 module S = Dpll.DPLL(Dpll.DefaultChoice)
 
-let pretty_print = function
+let rec pretty_print = function
   | [] -> print_string "\n"
-  | h::q -> print_int h
+  | h::q -> print_int h; print_string " "; pretty_print q
 
 (** Handle files given on the command line *)
 let handle_file : string -> unit = fun fname ->
   let p =  Dimacs.parse_file fname in
   begin 
     match p.typ with
-      | 0 -> print_string "bouh";
+      | 0 -> 
         begin
           match S.solve p with
           | None -> Format.printf "false@."
           | Some _ -> Format.printf "true@."
         end
-      | 1 -> print_string "yo";
+      | 1 -> 
         begin
           match S.solve_xnf p with
           | None -> Format.printf "false@."
-          | Some _ -> Format.printf "true@."
+          | Some lvar -> pretty_print lvar; Format.printf "true@."
         end
       | _ -> ()
   end

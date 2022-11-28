@@ -11,6 +11,7 @@ end
 
 module type SOLVER = sig
   val solve : Ast.t -> Ast.model option
+  val solve_xnf : Ast.t -> Ast.model option
 end
 
 module DPLL(C:CHOICE) : SOLVER =
@@ -79,5 +80,82 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
   *)
 
   and memoisation = ref Memois.empty  (* Ma table de mémoïsation *)
+
+
+
+
+  (* Projet LOGIA 1  *)
+
+  and solve_xnf : Ast.t -> Ast.model option = fun p -> 
+  
+    if Cnf.is_empty p.cnf then Some []
+    else 
+    ( let l_sgl = ref [] and xnf = ref p.cnf
+      in
+
+      (* Balaie la CNF pour enlever tous les singletons *)
+      while Cnf.exists (fun x -> (Clause.cardinal x) = 1) !xnf do
+      let l = List.map (fun elt -> Clause.choose elt) (Cnf.elements (Cnf.filter (fun elt -> (Clause.cardinal elt) = 1) !xnf)) in 
+      l_sgl := l@(!l_sgl); xnf := remove_lvar_clause_xnf l !xnf
+      done;
+      (* Avec remove_lvar_clause_xnf on supprime les occurences des variables à 0 *)
+
+      let xnf1 = Cnf.filter (fun elt -> not(Clause.is_empty elt)) !xnf in
+
+      (* Vérifie si lors de l'assignation des singletons, il n'y a pas eu de conflits, à savoir assignation impossible.
+      Si il y a des clauses vides, ça veut dire qu'il y avait une clause avec que 0. *)
+
+      if Cnf.cardinal !xnf <> Cnf.cardinal xnf1 then None
+      else
+
+      (* On veut nettoyer les variables déjà assignées en utilisant la régle A xor 1 = neg A et neg (A xor B) = neg A xor B *)
+
+      let cleaned_xnf = Cnf.filter (fun elt -> not(Clause.is_empty elt)) (Cnf.map (remove_assigned_lvar_xnf !l_sgl) xnf1) in
+
+      match Cnf.choose_opt cleaned_xnf with
+        | None -> Some !l_sgl (* La CNF est vide, donc satisfiable *)
+        | Some elt -> (* On choisit une variable dans cette clause, on sait qu'elle existe car on a enlevé toutes les clauses vides *)
+                      let new_var = Clause.choose elt in 
+                      begin
+                        let xnf2 = Cnf.map (Clause.remove (-new_var)) cleaned_xnf in
+                        let xnf3 = Cnf.map (remove_assigned_var_xnf new_var) xnf2 in
+                        let xnf4 = Cnf.filter (fun elt -> not(Clause.is_empty elt)) xnf3 in
+                        (* Nettoyage de la CNF avec cette assignation *)
+                        let new_xnf = {nb_var = (p.nb_var - (List.length !l_sgl)) - 1; nb_clause = Cnf.cardinal xnf3; cnf = xnf4} in
+                        match solve_xnf new_xnf with
+                          | None -> (* Non satisfiable, on évalue donc la variable à l'opposé *)
+                          ( memoisation := Memois.add xnf4 !memoisation;
+                            let second_var = -new_var in 
+                            let xnf5 = Cnf.map (Clause.remove (-second_var)) cleaned_xnf in
+                            let xnf6 = Cnf.map (remove_assigned_var_xnf second_var) xnf5 in
+                            let xnf7 = Cnf.filter (fun elt -> not(Clause.is_empty elt)) xnf6 in
+                            let second_cnf = {nb_var = new_xnf.nb_var; nb_clause = Cnf.cardinal xnf7; cnf = xnf7} in
+                            match solve_xnf second_cnf with
+                              | None -> None (* Avec cette valuation, ce n'est pas non plus satisfiable *)
+                              | Some l -> Some (second_var::((!l_sgl)@l)) (* Satisfiable, on retourne *)
+                          )
+                          | Some l -> Some (new_var::(!l_sgl@l)) (* Satisfiable, on retourne simplement *)
+                      end
+    ) 
+
+    and remove_lvar_clause_xnf lvar formula = match lvar with
+      | [] -> formula
+      | h::q -> remove_lvar_clause_xnf q (Cnf.map (Clause.remove (-h)) formula)
+    
+    and remove_assigned_var_xnf var cl = 
+      if Clause.cardinal cl = 1 && Clause.mem var cl then Clause.empty
+      else 
+        if Clause.cardinal cl > 1 && Clause.mem var cl then 
+          let new_cl = Clause.remove var cl in
+            let elt = Clause.choose new_cl in
+              let new_new_cl = Clause.remove elt new_cl in
+                Clause.add (-elt) new_new_cl
+        else
+          cl
+    
+    and remove_assigned_lvar_xnf lvar cl = match lvar with
+      | [] -> cl
+      | h::q -> remove_assigned_lvar_xnf q (remove_assigned_var_xnf h cl)
+
   
 end

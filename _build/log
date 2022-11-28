@@ -1,10 +1,10 @@
 # dune build --profile release
 # OCAMLPARAM: unset
 # Shared cache: disabled
-# Workspace root: "/home/maena/Documents/Etude/ENS Paris-Saclay/L3/S2/Projet
-# logique/Projet 1/solve"
+# Workspace root: "/home/maena/Documents/Etude/ENS
+# Paris-Saclay/M1/logia/part2/HornSAT"
 # Auto-detected concurrency: 4
-$ /usr/bin/ocamlc.opt -config > /tmp/dune_ae8292_output
+$ /usr/bin/ocamlc.opt -config > /tmp/dune_ec523e_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -25,15 +25,15 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_ae8292_output
 #        { "DUNE_OCAML_HARDCODED" : "/home/maena/.opam/default/lib"
 #        ; "DUNE_OCAML_STDLIB" : "/usr/lib/ocaml"
 #        ; "DUNE_SOURCEROOT" :
-#            "/home/maena/Documents/Etude/ENS Paris-Saclay/L3/S2/Projet logique/Projet 1/solve"
+#            "/home/maena/Documents/Etude/ENS Paris-Saclay/M1/logia/part2/HornSAT"
 #        ; "INSIDE_DUNE" :
-#            "/home/maena/Documents/Etude/ENS Paris-Saclay/L3/S2/Projet logique/Projet 1/solve/_build/default"
+#            "/home/maena/Documents/Etude/ENS Paris-Saclay/M1/logia/part2/HornSAT/_build/default"
 #        ; "OCAMLFIND_IGNORE_DUPS_IN" :
-#            "/home/maena/Documents/Etude/ENS Paris-Saclay/L3/S2/Projet logique/Projet 1/solve/_build/install/default/lib"
+#            "/home/maena/Documents/Etude/ENS Paris-Saclay/M1/logia/part2/HornSAT/_build/install/default/lib"
 #        ; "OCAMLPATH" :
-#            "/home/maena/Documents/Etude/ENS Paris-Saclay/L3/S2/Projet logique/Projet 1/solve/_build/install/default/lib"
+#            "/home/maena/Documents/Etude/ENS Paris-Saclay/M1/logia/part2/HornSAT/_build/install/default/lib"
 #        ; "OCAMLTOP_INCLUDE_PATH" :
-#            "/home/maena/Documents/Etude/ENS Paris-Saclay/L3/S2/Projet logique/Projet 1/solve/_build/install/default/lib/toplevel"
+#            "/home/maena/Documents/Etude/ENS Paris-Saclay/M1/logia/part2/HornSAT/_build/install/default/lib/toplevel"
 #        ; "OCAML_COLOR" : "always"
 #        ; "OPAMCOLOR" : "always"
 #        }
@@ -110,49 +110,3 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_ae8292_output
 #      ; windows_unicode = false
 #      }
 #  }
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/main.ml) > _build/default/src/.main.eobjs/main.ml.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/console.ml) > _build/default/src/.main.eobjs/console.ml.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/dimacs.ml) > _build/default/src/.main.eobjs/dimacs.ml.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -intf src/dpll.mli) > _build/default/src/.main.eobjs/dpll.mli.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/location.ml) > _build/default/src/.main.eobjs/location.ml.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -intf src/sudoku.mli) > _build/default/src/.main.eobjs/sudoku.mli.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -intf src/unequal.mli) > _build/default/src/.main.eobjs/unequal.mli.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -intf src/ast.mli) > _build/default/src/.main.eobjs/ast.mli.d
-$ (cd _build/default && /home/maena/.opam/default/bin/menhir --explain --table --external-tokens TokensDimacs src/parserDimacs.mly --base src/parserDimacs --infer-write-query src/parserDimacs__mock.ml.mock)
-$ (cd _build/default && /usr/bin/ocamllex -q -o src/lexerDimacs.ml src/lexerDimacs.mll)
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/lexerDimacs.ml) > _build/default/src/.main.eobjs/lexerDimacs.ml.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/parserDimacs__mock.ml.mock) > _build/default/src/.main.eobjs/parserDimacs__mock.ml.mock.d
-$ (cd _build/default && /home/maena/.opam/default/bin/menhir --only-tokens src/tokensDimacs.mly --base src/tokensDimacs)
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -intf src/tokensDimacs.mli) > _build/default/src/.main.eobjs/tokensDimacs.mli.d
-$ (cd _build/default && /usr/bin/ocamlc.opt -w -40 -g -bin-annot -I src/.main.eobjs/byte -I /home/maena/.opam/default/lib/menhirLib -no-alias-deps -o src/.main.eobjs/byte/tokensDimacs.cmi -c -intf src/tokensDimacs.mli)
-$ (cd _build/default && /usr/bin/ocamlc.opt -w -40 -g -bin-annot -I src/.main.eobjs/byte -I /home/maena/.opam/default/lib/menhirLib -no-alias-deps -o src/.main.eobjs/byte/ast.cmi -c -intf src/ast.mli)
-$ (cd _build/.sandbox/45efbc80c31df754b92b6e7354d446ff/default && /usr/bin/ocamlc.opt -w -40 -g -I src/.main.eobjs/byte -I /home/maena/.opam/default/lib/menhirLib -short-paths -i -impl src/parserDimacs__mock.ml.mock) > _build/.sandbox/45efbc80c31df754b92b6e7354d446ff/default/src/parserDimacs__mock.mli.inferred
-$ (cd _build/default && /home/maena/.opam/default/bin/menhir --explain --table --external-tokens TokensDimacs src/parserDimacs.mly --base src/parserDimacs --infer-read-reply src/parserDimacs__mock.mli.inferred)
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -intf src/parserDimacs.mli) > _build/default/src/.main.eobjs/parserDimacs.mli.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/ast.ml) > _build/default/src/.main.eobjs/ast.ml.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/tokensDimacs.ml) > _build/default/src/.main.eobjs/tokensDimacs.ml.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/parserDimacs.ml) > _build/default/src/.main.eobjs/parserDimacs.ml.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/dpll.ml) > _build/default/src/.main.eobjs/dpll.ml.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/sudoku.ml) > _build/default/src/.main.eobjs/sudoku.ml.d
-$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/unequal.ml) > _build/default/src/.main.eobjs/unequal.ml.d
-$ (cd _build/default && /usr/bin/ocamlc.opt -w -40 -g -bin-annot -I src/.main.eobjs/byte -I /home/maena/.opam/default/lib/menhirLib -no-alias-deps -o src/.main.eobjs/byte/dpll.cmi -c -intf src/dpll.mli)
-$ (cd _build/default && /usr/bin/ocamlc.opt -w -40 -g -bin-annot -I src/.main.eobjs/byte -I /home/maena/.opam/default/lib/menhirLib -no-alias-deps -o src/.main.eobjs/byte/sudoku.cmi -c -intf src/sudoku.mli)
-$ (cd _build/default && /usr/bin/ocamlc.opt -w -40 -g -bin-annot -I src/.main.eobjs/byte -I /home/maena/.opam/default/lib/menhirLib -no-alias-deps -o src/.main.eobjs/byte/parserDimacs.cmi -c -intf src/parserDimacs.mli)
-$ (cd _build/default && /usr/bin/ocamlc.opt -w -40 -g -bin-annot -I src/.main.eobjs/byte -I /home/maena/.opam/default/lib/menhirLib -no-alias-deps -o src/.main.eobjs/byte/unequal.cmi -c -intf src/unequal.mli)
-$ (cd _build/default && /usr/bin/ocamlc.opt -w -40 -g -bin-annot -I src/.main.eobjs/byte -I /home/maena/.opam/default/lib/menhirLib -no-alias-deps -o src/.main.eobjs/byte/location.cmo -c -impl src/location.ml)
-$ (cd _build/default && /usr/bin/ocamlc.opt -w -40 -g -bin-annot -I src/.main.eobjs/byte -I /home/maena/.opam/default/lib/menhirLib -no-alias-deps -o src/.main.eobjs/byte/console.cmo -c -impl src/console.ml)
-$ (cd _build/default && /usr/bin/ocamlc.opt -w -40 -g -bin-annot -I src/.main.eobjs/byte -I /home/maena/.opam/default/lib/menhirLib -no-alias-deps -o src/.main.eobjs/byte/lexerDimacs.cmo -c -impl src/lexerDimacs.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w -40 -g -I src/.main.eobjs/byte -I src/.main.eobjs/native -I /home/maena/.opam/default/lib/menhirLib -intf-suffix .ml -no-alias-deps -o src/.main.eobjs/native/tokensDimacs.cmx -c -impl src/tokensDimacs.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w -40 -g -I src/.main.eobjs/byte -I src/.main.eobjs/native -I /home/maena/.opam/default/lib/menhirLib -intf-suffix .ml -no-alias-deps -o src/.main.eobjs/native/ast.cmx -c -impl src/ast.ml)
-$ (cd _build/default && /usr/bin/ocamlc.opt -w -40 -g -bin-annot -I src/.main.eobjs/byte -I /home/maena/.opam/default/lib/menhirLib -no-alias-deps -o src/.main.eobjs/byte/dimacs.cmo -c -impl src/dimacs.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w -40 -g -I src/.main.eobjs/byte -I src/.main.eobjs/native -I /home/maena/.opam/default/lib/menhirLib -intf-suffix .ml -no-alias-deps -o src/.main.eobjs/native/location.cmx -c -impl src/location.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w -40 -g -I src/.main.eobjs/byte -I src/.main.eobjs/native -I /home/maena/.opam/default/lib/menhirLib -intf-suffix .ml -no-alias-deps -o src/.main.eobjs/native/dpll.cmx -c -impl src/dpll.ml)
-$ (cd _build/default && /usr/bin/ocamlc.opt -w -40 -g -bin-annot -I src/.main.eobjs/byte -I /home/maena/.opam/default/lib/menhirLib -no-alias-deps -o src/.main.eobjs/byte/main.cmo -c -impl src/main.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w -40 -g -I src/.main.eobjs/byte -I src/.main.eobjs/native -I /home/maena/.opam/default/lib/menhirLib -intf-suffix .ml -no-alias-deps -o src/.main.eobjs/native/parserDimacs.cmx -c -impl src/parserDimacs.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w -40 -g -I src/.main.eobjs/byte -I src/.main.eobjs/native -I /home/maena/.opam/default/lib/menhirLib -intf-suffix .ml -no-alias-deps -o src/.main.eobjs/native/sudoku.cmx -c -impl src/sudoku.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w -40 -g -I src/.main.eobjs/byte -I src/.main.eobjs/native -I /home/maena/.opam/default/lib/menhirLib -intf-suffix .ml -no-alias-deps -o src/.main.eobjs/native/unequal.cmx -c -impl src/unequal.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w -40 -g -I src/.main.eobjs/byte -I src/.main.eobjs/native -I /home/maena/.opam/default/lib/menhirLib -intf-suffix .ml -no-alias-deps -o src/.main.eobjs/native/console.cmx -c -impl src/console.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w -40 -g -I src/.main.eobjs/byte -I src/.main.eobjs/native -I /home/maena/.opam/default/lib/menhirLib -intf-suffix .ml -no-alias-deps -o src/.main.eobjs/native/lexerDimacs.cmx -c -impl src/lexerDimacs.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w -40 -g -I src/.main.eobjs/byte -I src/.main.eobjs/native -I /home/maena/.opam/default/lib/menhirLib -intf-suffix .ml -no-alias-deps -o src/.main.eobjs/native/dimacs.cmx -c -impl src/dimacs.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w -40 -g -I src/.main.eobjs/byte -I src/.main.eobjs/native -I /home/maena/.opam/default/lib/menhirLib -intf-suffix .ml -no-alias-deps -o src/.main.eobjs/native/main.cmx -c -impl src/main.ml)
-$ (cd _build/default && /usr/bin/ocamlopt.opt -w -40 -g -o src/main.exe /home/maena/.opam/default/lib/menhirLib/menhirLib.cmxa src/.main.eobjs/native/ast.cmx src/.main.eobjs/native/location.cmx src/.main.eobjs/native/console.cmx src/.main.eobjs/native/tokensDimacs.cmx src/.main.eobjs/native/lexerDimacs.cmx src/.main.eobjs/native/parserDimacs.cmx src/.main.eobjs/native/dimacs.cmx src/.main.eobjs/native/dpll.cmx src/.main.eobjs/native/sudoku.cmx src/.main.eobjs/native/unequal.cmx src/.main.eobjs/native/main.cmx)

@@ -84,7 +84,7 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
 
 
 
-  (* Projet LOGIA 1  *)
+  (********************** Projet LOGIA 1  **********************)
 
   and solve_xnf : Ast.t -> Ast.model option = fun p -> 
   

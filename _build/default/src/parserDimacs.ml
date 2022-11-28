@@ -29,8 +29,12 @@ include MenhirBasics
     let mk_xnf : int * int -> Ast.Clause.t list -> Ast.t = fun (nb_var,nb_clause) cls ->
       let open Ast in
       {nb_var; nb_clause; cnf = Cnf.of_list cls; typ = 1}
+    
+    let mk_hs : int * int -> Ast.Clause.t list -> Ast.t = fun (nb_var,nb_clause) cls ->
+      let open Ast in
+      {nb_var; nb_clause; cnf = Cnf.of_list cls; typ = 2}
 
-# 34 "src/parserDimacs.ml"
+# 38 "src/parserDimacs.ml"
 
 module Tables = struct
   
@@ -40,8 +44,10 @@ module Tables = struct
     fun _tok ->
       match _tok with
       | TokensDimacs.CNF ->
-          7
+          8
       | TokensDimacs.EOF ->
+          7
+      | TokensDimacs.HS ->
           6
       | TokensDimacs.INT _ ->
           5
@@ -64,6 +70,8 @@ module Tables = struct
           Obj.repr ()
       | TokensDimacs.EOF ->
           Obj.repr ()
+      | TokensDimacs.HS ->
+          Obj.repr ()
       | TokensDimacs.INT _v ->
           Obj.repr _v
       | TokensDimacs.NEWLINE ->
@@ -76,22 +84,22 @@ module Tables = struct
           Obj.repr ()
   
   and default_reduction =
-    (4, "\000\160\000\000\224\000\208\002@\003P`\200\007\016")
+    (8, "\000\000\011\000\000\000\000\000\016\000\000\000\015\000\000\000\014\000\000\002\004\000\000\003\005\000\006\000\r\b\000\t\000\007\001")
   
   and error =
-    (8, "\024\024\000\016!\004\004\b\000\004\004\b\000\014\014\000\000@\b\000\000\014\000D\000\000\014\000\000")
+    (9, "\024\012\000\002\002( \016\016\000\002\001\001\000\000 \016\016\000\006\131@\000\002\000 \000\000\006\128\b\128\000\0004\000\r\000\000\000")
   
   and start =
     1
   
   and action =
-    ((8, "\000\000\000\006\006\006\b\016\000\016\018\022\000\t\t\000\000\030\026\000\000\t\000\012\000\000\t\000\000"), (8, ":>C!\006\022\018)\026\030&>\"*.2JN"))
+    ((8, "\b\b\000\005\005\n\012\016\000\018\020\024\000\024\026\030\000\005\005\000\000&\"\000\000\005\000\016\000\000\005\000\005\000\000"), (8, "\022\018JN&S6%\006-\026\030\"N*.2:>BZ^"))
   
   and lhs =
-    (4, "\bvfUD3!")
+    (4, "\t\135wfeTC!")
   
   and goto =
-    ((8, "\007\018\000\012\000\000\000\000\000\000\000\000\000\007\006\000\000\000\000\000\000\018\000\022\000\000\030\000\000"), (8, "\018\004\029\026\022\024\018\014\027\021\022\024\018\003\025\023\022\024\018\024\000\028\022\024"))
+    ((8, "\t\004\000:\000\000\000\000\000\000\000\000\000\000\000\000\000\t\004\000\000\000\000\000\000\016\000\b\000\000\028\000(\000\000"), (8, "\022\004#\030\026\028\022\003\029\025\026\028\022\028\000\027\026\028\022\000\000 \026\028\022\000\000\"\026\028\018\031!"))
   
   and semantic_action =
     [|
@@ -105,17 +113,17 @@ module Tables = struct
           MenhirLib.EngineTypes.next = _menhir_stack;
         } = _menhir_stack in
         let i : (
-# 17 "src/parserDimacs.mly"
+# 21 "src/parserDimacs.mly"
        (int)
-# 111 "src/parserDimacs.ml"
+# 119 "src/parserDimacs.ml"
         ) = Obj.magic i in
         let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
         let _startpos = _startpos_i_ in
         let _endpos = _endpos_i_ in
         let _v : (int) = 
-# 54 "src/parserDimacs.mly"
+# 64 "src/parserDimacs.mly"
     ( i )
-# 119 "src/parserDimacs.ml"
+# 127 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -152,9 +160,9 @@ module Tables = struct
         let _startpos = _startpos_c_ in
         let _endpos = _endpos__3_ in
         let _v : (Ast.Cnf.elt) = 
-# 50 "src/parserDimacs.mly"
+# 60 "src/parserDimacs.mly"
     ( mk_clause c )
-# 158 "src/parserDimacs.ml"
+# 166 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -177,9 +185,9 @@ module Tables = struct
         let _startpos = _startpos__1_ in
         let _endpos = _endpos__1_ in
         let _v : (Ast.Cnf.elt list) = 
-# 42 "src/parserDimacs.mly"
+# 52 "src/parserDimacs.mly"
     ( [] )
-# 183 "src/parserDimacs.ml"
+# 191 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -209,9 +217,9 @@ module Tables = struct
         let _startpos = _startpos__1_ in
         let _endpos = _endpos_l_ in
         let _v : (Ast.Cnf.elt list) = 
-# 44 "src/parserDimacs.mly"
+# 54 "src/parserDimacs.mly"
     ( l )
-# 215 "src/parserDimacs.ml"
+# 223 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -241,9 +249,9 @@ module Tables = struct
         let _startpos = _startpos_c_ in
         let _endpos = _endpos_l_ in
         let _v : (Ast.Cnf.elt list) = 
-# 46 "src/parserDimacs.mly"
+# 56 "src/parserDimacs.mly"
     ( c :: l )
-# 247 "src/parserDimacs.ml"
+# 255 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -280,9 +288,9 @@ module Tables = struct
         let _startpos = _startpos__1_ in
         let _endpos = _endpos_l_ in
         let _v : (Ast.t) = 
-# 28 "src/parserDimacs.mly"
+# 32 "src/parserDimacs.mly"
     ( mk_cnf h l )
-# 286 "src/parserDimacs.ml"
+# 294 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -319,9 +327,48 @@ module Tables = struct
         let _startpos = _startpos__1_ in
         let _endpos = _endpos_l_ in
         let _v : (Ast.t) = 
-# 30 "src/parserDimacs.mly"
+# 34 "src/parserDimacs.mly"
     ( mk_xnf h l )
-# 325 "src/parserDimacs.ml"
+# 333 "src/parserDimacs.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _;
+          MenhirLib.EngineTypes.semv = l;
+          MenhirLib.EngineTypes.startp = _startpos_l_;
+          MenhirLib.EngineTypes.endp = _endpos_l_;
+          MenhirLib.EngineTypes.next = {
+            MenhirLib.EngineTypes.state = _;
+            MenhirLib.EngineTypes.semv = h;
+            MenhirLib.EngineTypes.startp = _startpos_h_;
+            MenhirLib.EngineTypes.endp = _endpos_h_;
+            MenhirLib.EngineTypes.next = {
+              MenhirLib.EngineTypes.state = _menhir_s;
+              MenhirLib.EngineTypes.semv = _1;
+              MenhirLib.EngineTypes.startp = _startpos__1_;
+              MenhirLib.EngineTypes.endp = _endpos__1_;
+              MenhirLib.EngineTypes.next = _menhir_stack;
+            };
+          };
+        } = _menhir_stack in
+        let l : (Ast.Cnf.elt list) = Obj.magic l in
+        let h : (int * int) = Obj.magic h in
+        let _1 : (unit list) = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos_l_ in
+        let _v : (Ast.t) = 
+# 36 "src/parserDimacs.mly"
+    ( mk_hs h l )
+# 372 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -339,7 +386,7 @@ module Tables = struct
         let _v : (unit list) = 
 # 208 "<standard.mly>"
     ( [] )
-# 343 "src/parserDimacs.ml"
+# 390 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -371,7 +418,7 @@ module Tables = struct
         let _v : (unit list) = 
 # 210 "<standard.mly>"
     ( x :: xs )
-# 375 "src/parserDimacs.ml"
+# 422 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -396,7 +443,7 @@ module Tables = struct
         let _v : (int list) = 
 # 218 "<standard.mly>"
     ( [ x ] )
-# 400 "src/parserDimacs.ml"
+# 447 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -428,7 +475,7 @@ module Tables = struct
         let _v : (int list) = 
 # 220 "<standard.mly>"
     ( x :: xs )
-# 432 "src/parserDimacs.ml"
+# 479 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -472,14 +519,14 @@ module Tables = struct
         } = _menhir_stack in
         let _5 : unit = Obj.magic _5 in
         let nbclause : (
-# 17 "src/parserDimacs.mly"
+# 21 "src/parserDimacs.mly"
        (int)
-# 478 "src/parserDimacs.ml"
+# 525 "src/parserDimacs.ml"
         ) = Obj.magic nbclause in
         let nbvar : (
-# 17 "src/parserDimacs.mly"
+# 21 "src/parserDimacs.mly"
        (int)
-# 483 "src/parserDimacs.ml"
+# 530 "src/parserDimacs.ml"
         ) = Obj.magic nbvar in
         let _2 : unit = Obj.magic _2 in
         let _1 : unit = Obj.magic _1 in
@@ -487,9 +534,9 @@ module Tables = struct
         let _startpos = _startpos__1_ in
         let _endpos = _endpos__5_ in
         let _v : (int * int) = 
-# 34 "src/parserDimacs.mly"
+# 40 "src/parserDimacs.mly"
     ( (nbvar, nbclause) )
-# 493 "src/parserDimacs.ml"
+# 540 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;
@@ -533,14 +580,14 @@ module Tables = struct
         } = _menhir_stack in
         let _5 : unit = Obj.magic _5 in
         let nbclause : (
-# 17 "src/parserDimacs.mly"
+# 21 "src/parserDimacs.mly"
        (int)
-# 539 "src/parserDimacs.ml"
+# 586 "src/parserDimacs.ml"
         ) = Obj.magic nbclause in
         let nbvar : (
-# 17 "src/parserDimacs.mly"
+# 21 "src/parserDimacs.mly"
        (int)
-# 544 "src/parserDimacs.ml"
+# 591 "src/parserDimacs.ml"
         ) = Obj.magic nbvar in
         let _2 : unit = Obj.magic _2 in
         let _1 : unit = Obj.magic _1 in
@@ -548,9 +595,70 @@ module Tables = struct
         let _startpos = _startpos__1_ in
         let _endpos = _endpos__5_ in
         let _v : (int * int) = 
-# 38 "src/parserDimacs.mly"
+# 48 "src/parserDimacs.mly"
     ( (nbvar, nbclause) )
-# 554 "src/parserDimacs.ml"
+# 601 "src/parserDimacs.ml"
+         in
+        {
+          MenhirLib.EngineTypes.state = _menhir_s;
+          MenhirLib.EngineTypes.semv = Obj.repr _v;
+          MenhirLib.EngineTypes.startp = _startpos;
+          MenhirLib.EngineTypes.endp = _endpos;
+          MenhirLib.EngineTypes.next = _menhir_stack;
+        });
+      (fun _menhir_env ->
+        let _menhir_stack = _menhir_env.MenhirLib.EngineTypes.stack in
+        let {
+          MenhirLib.EngineTypes.state = _;
+          MenhirLib.EngineTypes.semv = _5;
+          MenhirLib.EngineTypes.startp = _startpos__5_;
+          MenhirLib.EngineTypes.endp = _endpos__5_;
+          MenhirLib.EngineTypes.next = {
+            MenhirLib.EngineTypes.state = _;
+            MenhirLib.EngineTypes.semv = nbclause;
+            MenhirLib.EngineTypes.startp = _startpos_nbclause_;
+            MenhirLib.EngineTypes.endp = _endpos_nbclause_;
+            MenhirLib.EngineTypes.next = {
+              MenhirLib.EngineTypes.state = _;
+              MenhirLib.EngineTypes.semv = nbvar;
+              MenhirLib.EngineTypes.startp = _startpos_nbvar_;
+              MenhirLib.EngineTypes.endp = _endpos_nbvar_;
+              MenhirLib.EngineTypes.next = {
+                MenhirLib.EngineTypes.state = _;
+                MenhirLib.EngineTypes.semv = _2;
+                MenhirLib.EngineTypes.startp = _startpos__2_;
+                MenhirLib.EngineTypes.endp = _endpos__2_;
+                MenhirLib.EngineTypes.next = {
+                  MenhirLib.EngineTypes.state = _menhir_s;
+                  MenhirLib.EngineTypes.semv = _1;
+                  MenhirLib.EngineTypes.startp = _startpos__1_;
+                  MenhirLib.EngineTypes.endp = _endpos__1_;
+                  MenhirLib.EngineTypes.next = _menhir_stack;
+                };
+              };
+            };
+          };
+        } = _menhir_stack in
+        let _5 : unit = Obj.magic _5 in
+        let nbclause : (
+# 21 "src/parserDimacs.mly"
+       (int)
+# 647 "src/parserDimacs.ml"
+        ) = Obj.magic nbclause in
+        let nbvar : (
+# 21 "src/parserDimacs.mly"
+       (int)
+# 652 "src/parserDimacs.ml"
+        ) = Obj.magic nbvar in
+        let _2 : unit = Obj.magic _2 in
+        let _1 : unit = Obj.magic _1 in
+        let _endpos__0_ = _menhir_stack.MenhirLib.EngineTypes.endp in
+        let _startpos = _startpos__1_ in
+        let _endpos = _endpos__5_ in
+        let _v : (int * int) = 
+# 44 "src/parserDimacs.mly"
+    ( (nbvar, nbclause) )
+# 662 "src/parserDimacs.ml"
          in
         {
           MenhirLib.EngineTypes.state = _menhir_s;

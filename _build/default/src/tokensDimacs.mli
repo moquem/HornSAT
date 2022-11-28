@@ -7,5 +7,6 @@ type token =
   | P
   | NEWLINE
   | INT of (int)
+  | HS
   | EOF
   | CNF

@@ -35,6 +35,7 @@ rule token = parse
   | "p"             { P }
   | "cnf"           { CNF }
   | "xnf"           { XNF }
+  | "hs"            { HS  }
   | eof             { EOF }
   | zero_numeric    { ZERO }
   | [' ' '\t' '\r'] { token lexbuf }

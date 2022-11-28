@@ -2,7 +2,7 @@
 
 %token EOF
 %token ZERO
-%token P CNF XNF
+%token P CNF XNF HS
 %token NEWLINE
 %token <int> INT
 

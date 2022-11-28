@@ -1,6 +1,5 @@
 type execution_mode =
   | Cnf (** Solve a formula *)
-  | Xnf
 
 
 (** By default we solve a formula given in the dimacs format *)
@@ -9,21 +8,28 @@ let mode = ref Cnf
 (** Default solver. By doing the third part of the project, you might come with other solvers *)
 module S = Dpll.DPLL(Dpll.DefaultChoice)
 
+let pretty_print = function
+  | [] -> print_string "\n"
+  | h::q -> print_int h
+
 (** Handle files given on the command line *)
 let handle_file : string -> unit = fun fname ->
   let p =  Dimacs.parse_file fname in
-  begin
-    match S.solve p with
-    | None -> Format.printf "false@."
-    | Some _ -> Format.printf "true@."
-  end
-
-let handle_file_xnf : string -> unit = fun fname ->
-  let p = Dimacs.parse_file fname in 
   begin 
-    match S.solve_xnf p with
-      | None -> Format.printf "false@."
-      | Some _ -> Format.printf "true@."
+    match p.typ with
+      | 0 -> 
+        begin
+          match S.solve p with
+          | None -> Format.printf "false@."
+          | Some _ -> Format.printf "true@."
+        end
+      | 1 -> 
+        begin
+          match S.solve_xnf p with
+          | None -> Format.printf "false@."
+          | Some _ -> Format.printf "true@."
+        end
+      | _ -> ()
   end
 
 (** Specification of the options handle by the program. You are only allowed to ADD new options *)
@@ -50,7 +56,6 @@ let _ =
     begin
       match !mode with
       | Cnf -> List.iter handle_file !files
-      | Xnf -> List.iter handle_file_xnf !files
     end
   with
   | Fatal(None,    msg) -> exit_with "%s" msg

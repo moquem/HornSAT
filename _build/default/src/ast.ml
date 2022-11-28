@@ -14,7 +14,8 @@ type t =
   {
     nb_var : int;
     nb_clause : int;
-    cnf : Cnf.t
+    cnf : Cnf.t;
+    typ : int
   }
 
 let neg var = -var

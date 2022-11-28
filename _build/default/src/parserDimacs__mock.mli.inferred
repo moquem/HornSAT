@@ -3,8 +3,8 @@ val mk_clause : int list -> Ast.Cnf.elt
 val mk_cnf : int * int -> Ast.Cnf.elt list -> Ast.t
 val mk_xnf : int * int -> Ast.Cnf.elt list -> Ast.t
 val menhir_begin_marker : int
-val xv_xnf : Ast.Cnf.elt list
-val xv_start : int * int
+val xv_start_xnf : int * int
+val xv_start_cnf : int * int
 val xv_nonempty_list_atom_ : int list
 val xv_list_NEWLINE_ : unit list
 val xv_file : Ast.t

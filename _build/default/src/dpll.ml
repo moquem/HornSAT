@@ -45,13 +45,13 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
                       let new_var = Clause.choose elt in 
                       begin
                         let cnf4 = remove_var_clause cnf3 new_var in (* Nettoyage de la CNF avec cette assignation *)
-                        let new_cnf = {nb_var = (p.nb_var - (List.length !l_sgl)) - 1; nb_clause = Cnf.cardinal cnf4; cnf = cnf4} in
+                        let new_cnf = {nb_var = (p.nb_var - (List.length !l_sgl)) - 1; nb_clause = Cnf.cardinal cnf4; cnf = cnf4; typ = p.typ} in
                         match solve new_cnf with
                           | None -> (* Non satisfiable, on évalue donc la variable à l'opposé *)
                           ( memoisation := Memois.add cnf4 !memoisation;
                             let second_var = -new_var in 
                             let cnf6 = remove_var_clause cnf3 second_var in
-                            let second_cnf = solve {nb_var = new_cnf.nb_var; nb_clause = Cnf.cardinal cnf6; cnf = cnf6} in
+                            let second_cnf = solve {nb_var = new_cnf.nb_var; nb_clause = Cnf.cardinal cnf6; cnf = cnf6; typ = p.typ} in
                             match second_cnf with
                               | None -> memoisation := Memois.add p.cnf !memoisation; None (* Avec cette valuation, ce n'est pas non plus satisfiable *)
                               | Some l -> Some (second_var::((!l_sgl)@l)) (* Satisfiable, on retourne *)
@@ -121,7 +121,7 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
                         let xnf3 = Cnf.map (remove_assigned_var_xnf new_var) xnf2 in
                         let xnf4 = Cnf.filter (fun elt -> not(Clause.is_empty elt)) xnf3 in
                         (* Nettoyage de la CNF avec cette assignation *)
-                        let new_xnf = {nb_var = (p.nb_var - (List.length !l_sgl)) - 1; nb_clause = Cnf.cardinal xnf3; cnf = xnf4} in
+                        let new_xnf = {nb_var = (p.nb_var - (List.length !l_sgl)) - 1; nb_clause = Cnf.cardinal xnf3; cnf = xnf4; typ = p.typ} in
                         match solve_xnf new_xnf with
                           | None -> (* Non satisfiable, on évalue donc la variable à l'opposé *)
                           ( memoisation := Memois.add xnf4 !memoisation;
@@ -129,7 +129,7 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
                             let xnf5 = Cnf.map (Clause.remove (-second_var)) cleaned_xnf in
                             let xnf6 = Cnf.map (remove_assigned_var_xnf second_var) xnf5 in
                             let xnf7 = Cnf.filter (fun elt -> not(Clause.is_empty elt)) xnf6 in
-                            let second_cnf = {nb_var = new_xnf.nb_var; nb_clause = Cnf.cardinal xnf7; cnf = xnf7} in
+                            let second_cnf = {nb_var = new_xnf.nb_var; nb_clause = Cnf.cardinal xnf7; cnf = xnf7; typ = p.typ} in
                             match solve_xnf second_cnf with
                               | None -> None (* Avec cette valuation, ce n'est pas non plus satisfiable *)
                               | Some l -> Some (second_var::((!l_sgl)@l)) (* Satisfiable, on retourne *)

@@ -3,11 +3,11 @@
 
     let mk_cnf : int * int -> Ast.Clause.t list -> Ast.t = fun (nb_var,nb_clause) cls ->
       let open Ast in
-      {nb_var; nb_clause; cnf = Cnf.of_list cls}
+      {nb_var; nb_clause; cnf = Cnf.of_list cls; typ = 0}
     
     let mk_xnf : int * int -> Ast.Clause.t list -> Ast.t = fun (nb_var,nb_clause) cls ->
       let open Ast in
-      {nb_var; nb_clause; cnf = Cnf.of_list cls}
+      {nb_var; nb_clause; cnf = Cnf.of_list cls; typ = 1}
 %}
 
 %token EOF
@@ -24,14 +24,16 @@
 %%
 
 file:
-  | NEWLINE* h=start l=cnf
+  | NEWLINE* h=start_cnf l=cnf
     { mk_cnf h l }
-  | NEWLINE* h=start l=xnf
+  | NEWLINE* h=start_xnf l=cnf
     { mk_xnf h l }
 
-start:
+start_cnf:
   | P CNF nbvar=INT nbclause=INT NEWLINE
     { (nbvar, nbclause) }
+
+start_xnf:
   | P XNF nbvar=INT nbclause= INT NEWLINE
     { (nbvar, nbclause) }
 
@@ -42,14 +44,6 @@ cnf:
     { l }
   | c=clause l=cnf
     { c :: l }
-
-xnf:
-  | EOF
-    { [] }
-  | NEWLINE l=xnf
-    { l }
-  | c=clause l=xnf
-    { c :: l}
 
 clause:
   | c=nonempty_list(atom) ZERO NEWLINE

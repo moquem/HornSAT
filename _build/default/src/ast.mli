@@ -18,7 +18,8 @@ type t =
   {
     nb_var : int; (** number of variables *)
     nb_clause : int; (** number of clauses *)
-    cnf : Cnf.t (** the cnf formula *)
+    cnf : Cnf.t; (** the formula *)
+    typ : int; (** xnf or cnf *)
   }
 
 (** [neg v] returns the opposite litteral *)

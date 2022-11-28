@@ -6,9 +6,9 @@ timeout=0
 fail=0
 
 
-OKFILES=$(find ./tests/OK -name "*.xnf")
-KOFILES=$(find ./tests/KO -name "*.xnf")
-echo "find ./tests/KO -path '$KODIR/*.xnf'"
+OKFILES=$(find ./tests/OK -name "*.cnf")
+KOFILES=$(find ./tests/KO -name "*.cnf")
+echo "find ./tests/KO -path '$KODIR/*.cnf'"
 TOTALOK=$(wc -w <<< "$OKFILES")
 TOTALKO=$(wc -w <<< "$KOFILES")
 TOTAL=$((TOTALOK+TOTALKO))

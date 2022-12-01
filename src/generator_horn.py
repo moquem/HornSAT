@@ -14,7 +14,7 @@ def sat_random_horn(n):
         v = random.randint(0,n-1)
         hs.add(frozenset([model[v]*(v+1)+(1-model[v])*(-(v+1))]))
 
-    nb_clause = random.randint(0,int(MAX_CLAUSE/(MAX_VAR+1-n)))     # On rajoute des clauses avec au moins une variable qui respecte le modèle.
+    nb_clause = random.randint(1,int(MAX_CLAUSE/(MAX_VAR+1-n)))     # On rajoute des clauses avec au moins une variable qui respecte le modèle.
     for _ in range(nb_clause):
         cl = []
         v = random.randint(0,n-1)

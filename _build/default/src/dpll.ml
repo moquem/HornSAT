@@ -1,4 +1,5 @@
 open Ast
+open Tree_type
 
 module type CHOICE = sig
   val choice : Ast.Cnf.t -> Ast.var
@@ -6,12 +7,12 @@ end
 
 module DefaultChoice =
 struct
-  let choice : Ast.Cnf.t -> Ast.var = fun cnf -> failwith "todo: choice"
+  let choice : Ast.Cnf.t -> Ast.var = fun _ -> failwith "todo: choice"
 end
 
 module type SOLVER = sig
   val solve : Ast.t -> Ast.model option
-  val solve_xnf : Ast.t -> Ast.model option
+  val solve_xnf : Ast.t -> (Ast.model option * var tree)
   val solve_hs : Ast.t -> (Ast.model option * Ast.var option)
 end
 
@@ -90,9 +91,9 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
 
   (* XNF *)
 
-  and solve_xnf : Ast.t -> Ast.model option = fun p -> 
+  and solve_xnf : Ast.t -> (Ast.model option * var tree) = fun p -> 
   
-    if Cnf.is_empty p.cnf then Some []
+    if Cnf.is_empty p.cnf then (Some [], Nil)
     else 
     ( let l_sgl = ref [] and xnf = ref p.cnf and unsat = ref false
       in
@@ -107,11 +108,11 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
       (* Avec remove_lvar_clause_xnf on supprime les occurences des variables *)
 
       (* On regarde s'il y a un conflit *)
-      if !unsat || conflit !l_sgl then None
+      if !unsat || conflit !l_sgl then (None, Node(!l_sgl, Nil, Nil)
       else
 
       match Cnf.choose_opt !xnf with
-        | None -> Some !l_sgl (* La CNF est vide, donc satisfiable *)
+        | None -> (Some !l_sgl, Nil) (* La CNF est vide, donc satisfiable *)
         | Some elt -> (* On choisit une variable dans cette clause, on sait qu'elle existe car on a enlevé toutes les clauses vides *)
                       let new_var = Clause.choose elt in 
                       begin
@@ -122,17 +123,17 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
                         let new_xnf = {nb_var = (p.nb_var - (List.length !l_sgl)) - 1; nb_clause = Cnf.cardinal xnf3; cnf = xnf4; typ = p.typ} in
 
                         match solve_xnf new_xnf with
-                          | None -> (* Non satisfiable, on évalue donc la variable à l'opposé *)
+                          | (None, t1) -> (* Non satisfiable, on évalue donc la variable à l'opposé *)
                             ( let second_var = -new_var in 
                             let xnf5 = Cnf.map (Clause.remove (-second_var)) !xnf in
                             let xnf6 = Cnf.map (remove_assigned_var_xnf second_var) xnf5 in
                             let xnf7 = Cnf.filter (fun elt -> not(Clause.is_empty elt)) xnf6 in
                             let second_cnf = {nb_var = new_xnf.nb_var; nb_clause = Cnf.cardinal xnf7; cnf = xnf7; typ = p.typ} in
                             match solve_xnf second_cnf with
-                              | None -> None (* Avec cette valuation, ce n'est pas non plus satisfiable *)
-                              | Some l -> Some (second_var::((!l_sgl)@l)) (* Satisfiable, on retourne *)
+                              | (None, t2) -> (None, Node(!l_sgl, t1, t2)) (* Avec cette valuation, ce n'est pas non plus satisfiable *)
+                              | (Some l, _) -> (Some (second_var::((!l_sgl)@l)), Nil) (* Satisfiable, on retourne *)
                             )
-                          | Some l -> Some (new_var::(!l_sgl@l)) (* Satisfiable, on retourne simplement *)
+                          | (Some l, _) -> (Some (new_var::(!l_sgl@l)), Nil) (* Satisfiable, on retourne simplement *)
                       end
     ) 
 
@@ -164,7 +165,13 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
     | [] -> print_string "\n"
     | h::q -> print_int h; pretty_print q
 
-  
+  and pretty_print_as_column = function
+     | [] -> print_string "\n"
+     | hd::tl -> print_int hd ; print_string "\n  |  \n \n" ; pretty_print tl
+
+  and pretty_print_tree = function
+    | Nil -> print_string "\n"
+    | Node(l,t1,t2) -> pretty_print_as_column l ; 
 
   (* HornSAT *)
 

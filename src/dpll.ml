@@ -1,5 +1,4 @@
 open Ast
-open Tree_type
 
 module type CHOICE = sig
   val choice : Ast.Cnf.t -> Ast.var
@@ -108,7 +107,7 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
       (* Avec remove_lvar_clause_xnf on supprime les occurences des variables *)
 
       (* On regarde s'il y a un conflit *)
-      if !unsat || conflit !l_sgl then (None, Node(!l_sgl, Nil, Nil)
+      if !unsat || conflit !l_sgl then (None, Node(!l_sgl, Nil, Nil))
       else
 
       match Cnf.choose_opt !xnf with
@@ -165,7 +164,13 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
     | [] -> print_string "\n"
     | h::q -> print_int h; pretty_print q
 
-  
+  and pretty_print_as_column = function
+     | [] -> print_string "\n"
+     | hd::tl -> print_int hd ; print_string "\n  |  \n \n" ; pretty_print tl
+
+  and pretty_print_tree = function
+    | Nil -> print_string "\n"
+    | Node(l,t1,t2) -> pretty_print_as_column l ; 
 
   (* HornSAT *)
 

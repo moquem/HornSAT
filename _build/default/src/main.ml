@@ -1,3 +1,5 @@
+open Dpll
+
 type execution_mode =
   | Cnf (** Solve a formula *)
 

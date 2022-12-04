@@ -6,3 +6,4 @@ LexerDimacs
 Location
 ParserDimacs
 TokensDimacs
+Tree_type

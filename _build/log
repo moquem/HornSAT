@@ -1,35 +1,31 @@
-# dune build
+# dune build --profile release
 # OCAMLPARAM: unset
 # Shared cache: disabled
 # Workspace root: /home/pol1/Desktop/Cours/M1/HornSAT_1
 # Auto-detected concurrency: 2
-$ /usr/bin/ocamlc.opt -config > /tmp/dune_f06236_output
+$ /home/pol1/.opam/default/bin/ocamlc.opt -config > /tmp/dune_0a4302_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
-#  ; profile = Dev
+#  ; profile = Release
 #  ; merlin = true
 #  ; for_host = None
 #  ; fdo_target_exe = None
 #  ; build_dir = "default"
-#  ; toplevel_path = None
-#  ; ocaml_bin = External "/usr/bin"
-#  ; ocaml = Ok External "/usr/bin/ocaml"
-#  ; ocamlc = External "/usr/bin/ocamlc.opt"
-#  ; ocamlopt = Ok External "/usr/bin/ocamlopt.opt"
-#  ; ocamldep = Ok External "/usr/bin/ocamldep.opt"
-#  ; ocamlmklib = Ok External "/usr/bin/ocamlmklib.opt"
+#  ; toplevel_path = Some External "/home/pol1/.opam/default/lib/toplevel"
+#  ; ocaml_bin = External "/home/pol1/.opam/default/bin"
+#  ; ocaml = Ok External "/home/pol1/.opam/default/bin/ocaml"
+#  ; ocamlc = External "/home/pol1/.opam/default/bin/ocamlc.opt"
+#  ; ocamlopt = Ok External "/home/pol1/.opam/default/bin/ocamlopt.opt"
+#  ; ocamldep = Ok External "/home/pol1/.opam/default/bin/ocamldep.opt"
+#  ; ocamlmklib = Ok External "/home/pol1/.opam/default/bin/ocamlmklib.opt"
 #  ; env =
 #      map
-#        { "CAML_LD_LIBRARY_PATH" :
-#            "/home/pol1/Desktop/Cours/M1/HornSAT_1/_build/install/default/lib/stublibs"
-#        ; "DUNE_OCAML_HARDCODED" : "/usr/lib/ocaml"
-#        ; "DUNE_OCAML_STDLIB" : "/usr/lib/ocaml"
+#        { "DUNE_OCAML_HARDCODED" : "/home/pol1/.opam/default/lib"
+#        ; "DUNE_OCAML_STDLIB" : "/home/pol1/.opam/default/lib/ocaml"
 #        ; "DUNE_SOURCEROOT" : "/home/pol1/Desktop/Cours/M1/HornSAT_1"
 #        ; "INSIDE_DUNE" :
 #            "/home/pol1/Desktop/Cours/M1/HornSAT_1/_build/default"
-#        ; "MANPATH" :
-#            "/home/pol1/Desktop/Cours/M1/HornSAT_1/_build/install/default/bin"
 #        ; "OCAMLFIND_IGNORE_DUPS_IN" :
 #            "/home/pol1/Desktop/Cours/M1/HornSAT_1/_build/install/default/lib"
 #        ; "OCAMLPATH" :
@@ -39,62 +35,22 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_f06236_output
 #        ; "OCAML_COLOR" : "always"
 #        ; "OPAMCOLOR" : "always"
 #        }
-#  ; findlib_paths = [ External "/usr/lib/ocaml" ]
+#  ; findlib_paths = [ External "/home/pol1/.opam/default/lib" ]
 #  ; arch_sixtyfour = true
 #  ; natdynlink_supported = true
 #  ; supports_shared_libraries = true
 #  ; ocaml_config =
 #      { version = "4.14.0"
-#      ; standard_library_default = "/usr/lib/ocaml"
-#      ; standard_library = "/usr/lib/ocaml"
+#      ; standard_library_default = "/home/pol1/.opam/default/lib/ocaml"
+#      ; standard_library = "/home/pol1/.opam/default/lib/ocaml"
 #      ; standard_runtime = "the_standard_runtime_variable_was_deleted"
 #      ; ccomp_type = "cc"
 #      ; c_compiler = "gcc"
 #      ; ocamlc_cflags =
-#          [ "-O2"
-#          ; "-fno-strict-aliasing"
-#          ; "-fwrapv"
-#          ; "-pthread"
-#          ; "-g"
-#          ; "-fno-omit-frame-pointer"
-#          ; "-fPIC"
-#          ; "-march=x86-64"
-#          ; "-mtune=generic"
-#          ; "-O2"
-#          ; "-pipe"
-#          ; "-fno-plt"
-#          ; "-fexceptions"
-#          ; "-Wp,-D_FORTIFY_SOURCE=2"
-#          ; "-Wformat"
-#          ; "-Werror=format-security"
-#          ; "-fstack-clash-protection"
-#          ; "-fcf-protection"
-#          ; "-flto=auto"
-#          ; "-ffat-lto-objects"
-#          ]
+#          [ "-O2"; "-fno-strict-aliasing"; "-fwrapv"; "-pthread"; "-fPIC" ]
 #      ; ocamlc_cppflags = [ "-D_FILE_OFFSET_BITS=64" ]
 #      ; ocamlopt_cflags =
-#          [ "-O2"
-#          ; "-fno-strict-aliasing"
-#          ; "-fwrapv"
-#          ; "-pthread"
-#          ; "-g"
-#          ; "-fno-omit-frame-pointer"
-#          ; "-fPIC"
-#          ; "-march=x86-64"
-#          ; "-mtune=generic"
-#          ; "-O2"
-#          ; "-pipe"
-#          ; "-fno-plt"
-#          ; "-fexceptions"
-#          ; "-Wp,-D_FORTIFY_SOURCE=2"
-#          ; "-Wformat"
-#          ; "-Werror=format-security"
-#          ; "-fstack-clash-protection"
-#          ; "-fcf-protection"
-#          ; "-flto=auto"
-#          ; "-ffat-lto-objects"
-#          ]
+#          [ "-O2"; "-fno-strict-aliasing"; "-fwrapv"; "-pthread"; "-fPIC" ]
 #      ; ocamlopt_cppflags = [ "-D_FILE_OFFSET_BITS=64" ]
 #      ; bytecomp_c_compiler =
 #          [ "gcc"
@@ -102,22 +58,7 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_f06236_output
 #          ; "-fno-strict-aliasing"
 #          ; "-fwrapv"
 #          ; "-pthread"
-#          ; "-g"
-#          ; "-fno-omit-frame-pointer"
 #          ; "-fPIC"
-#          ; "-march=x86-64"
-#          ; "-mtune=generic"
-#          ; "-O2"
-#          ; "-pipe"
-#          ; "-fno-plt"
-#          ; "-fexceptions"
-#          ; "-Wp,-D_FORTIFY_SOURCE=2"
-#          ; "-Wformat"
-#          ; "-Werror=format-security"
-#          ; "-fstack-clash-protection"
-#          ; "-fcf-protection"
-#          ; "-flto=auto"
-#          ; "-ffat-lto-objects"
 #          ; "-D_FILE_OFFSET_BITS=64"
 #          ]
 #      ; bytecomp_c_libraries = [ "-lm"; "-lpthread" ]
@@ -127,22 +68,7 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_f06236_output
 #          ; "-fno-strict-aliasing"
 #          ; "-fwrapv"
 #          ; "-pthread"
-#          ; "-g"
-#          ; "-fno-omit-frame-pointer"
 #          ; "-fPIC"
-#          ; "-march=x86-64"
-#          ; "-mtune=generic"
-#          ; "-O2"
-#          ; "-pipe"
-#          ; "-fno-plt"
-#          ; "-fexceptions"
-#          ; "-Wp,-D_FORTIFY_SOURCE=2"
-#          ; "-Wformat"
-#          ; "-Werror=format-security"
-#          ; "-fstack-clash-protection"
-#          ; "-fcf-protection"
-#          ; "-flto=auto"
-#          ; "-ffat-lto-objects"
 #          ; "-D_FILE_OFFSET_BITS=64"
 #          ]
 #      ; native_c_libraries = [ "-lm" ]
@@ -155,7 +81,7 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_f06236_output
 #      ; system = "linux"
 #      ; asm = [ "as" ]
 #      ; asm_cfi_supported = true
-#      ; with_frame_pointers = true
+#      ; with_frame_pointers = false
 #      ; ext_exe = ""
 #      ; ext_obj = ".o"
 #      ; ext_asm = ".s"
@@ -169,7 +95,7 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_f06236_output
 #      ; profiling = false
 #      ; flambda = false
 #      ; spacetime = false
-#      ; safe_string = false
+#      ; safe_string = true
 #      ; exec_magic_number = "Caml1999X031"
 #      ; cmi_magic_number = "Caml1999I031"
 #      ; cmo_magic_number = "Caml1999O031"
@@ -185,3 +111,14 @@ $ /usr/bin/ocamlc.opt -config > /tmp/dune_f06236_output
 #      ; windows_unicode = false
 #      }
 #  }
+$ (cd _build/default && /home/pol1/.opam/default/bin/ocamldep.opt -modules -impl src/main.ml) > _build/default/src/.main.eobjs/main.ml.d
+$ (cd _build/default && /home/pol1/.opam/default/bin/ocamldep.opt -modules -intf src/dpll.mli) > _build/default/src/.main.eobjs/dpll.mli.d
+> File "src/dpll.mli", line 10, characters 2-8:
+> 10 |   struct
+>        ^^^^^^
+> Error: Syntax error: 'end' expected
+> File "src/dpll.mli", line 9, characters 21-24:
+> 9 | module type SOLVER = sig
+>                          ^^^
+>   This 'sig' might be unmatched
+[2]

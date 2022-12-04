@@ -4,6 +4,10 @@ type lit = int
 
 type model = int list
 
+type 'a tree = 
+    | Nil
+    | Node of 'a list*('a tree)*('a tree) 
+
 module Clause = Set.Make(struct type t = lit let compare = compare end)
 
 module Cnf = Set.Make(struct type t = Clause.t let compare = Clause.compare end)

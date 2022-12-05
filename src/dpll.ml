@@ -100,10 +100,16 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
       (* Balaie la CNF pour enlever tous les singletons *)
       while not(!unsat) && Cnf.exists (fun x -> (Clause.cardinal x) = 1) !xnf do
       let l = List.map (fun elt -> Clause.choose elt) (Cnf.elements (Cnf.filter (fun elt -> (Clause.cardinal elt) = 1) !xnf)) in 
-      l_sgl := l@(!l_sgl); xnf := Cnf.map (remove_lvar_neg_clause_xnf l) !xnf;
+      l_sgl := l@(!l_sgl); 
+      let station_xnf = ref Cnf.empty in
+      while !xnf <> !station_xnf && not(!unsat) do
+      station_xnf := !xnf;
+      xnf := Cnf.map (remove_lvar_pos_clause_xnf l) !xnf; xnf := Cnf.filter (fun elt -> not(Clause.is_empty elt)) !xnf;
+      xnf := Cnf.map (remove_lvar_neg_clause_xnf l) !xnf;
       if Cnf.exists (fun elt -> (Clause.cardinal elt) = 0) !xnf then unsat := true 
-      else xnf := Cnf.map (remove_lvar_pos_clause_xnf l) !xnf; xnf := Cnf.filter (fun elt -> not(Clause.is_empty elt)) !xnf
+      done
       done;
+       
       (* Avec remove_lvar_clause_xnf on supprime les occurences des variables *)
 
       (* On regarde s'il y a un conflit *)
@@ -152,7 +158,7 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
   and remove_assigned_var_xnf var cl = 
     if Clause.cardinal cl = 1 && Clause.mem var cl then Clause.empty
     else 
-      if Clause.cardinal cl > 1 && Clause.mem var cl then 
+      if Clause.cardinal cl > 1 && Clause.mem var cl then
         let new_cl = Clause.remove var cl in
           let elt = Clause.choose new_cl in
             let new_new_cl = Clause.remove elt new_cl in
@@ -160,9 +166,9 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
       else
         cl
 
-  and pretty_print = function
+  and pretty_print : Ast.Clause.elt list -> unit = function
     | [] -> print_string "\n"
-    | h::q -> print_int h; pretty_print q
+    | h::q -> print_int h; print_string " "; pretty_print q
 
   
 
@@ -174,19 +180,20 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
       let var_val = Array.make (p.nb_var+1) (-1) and l = ref [] and horn = ref p.cnf and conflit = ref 0 in
         while !conflit = 0 && Cnf.exists (fun elt -> Clause.cardinal elt = 1) !horn do
           let l_sgl = ref [] in
-          Cnf.iter (fun elt -> if Clause.cardinal elt = 1 then
-                                  let var = Clause.choose elt in 
-                                    if var < 0 then 
-                                      begin
-                                        if var_val.(-var) = -1  then (var_val.(-var) <- 0; l_sgl := var::(!l_sgl))
-                                        else if var_val.(-var) = 1 then conflit := (-var) 
-                                      end
-                                    else 
-                                      begin
-                                        if var_val.(var) = -1  then (var_val.(var) <- 1; l_sgl := var::(!l_sgl))
-                                        else if var_val.(var) = 0 then conflit := var
-                                      end
-                                      ) !horn;
+          Cnf.iter (fun elt -> 
+                      if Clause.cardinal elt = 1 then
+                        let var = Clause.choose elt in 
+                          if var < 0 then 
+                            begin
+                              if var_val.(-var) = -1  then (var_val.(-var) <- 0; l_sgl := var::(!l_sgl))
+                              else if var_val.(-var) = 1 then conflit := (-var) 
+                            end
+                          else 
+                            begin
+                              if var_val.(var) = -1  then (var_val.(var) <- 1; l_sgl := var::(!l_sgl))
+                              else if var_val.(var) = 0 then conflit := var
+                            end)
+          !horn;
           begin
           match remove_lvar_clause_xor !l_sgl !horn with
             | None, Some v -> conflit := v

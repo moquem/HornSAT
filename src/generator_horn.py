@@ -103,7 +103,7 @@ def unsat_random_horn(n):  # n > 0
     
 
 def sat_format_horn(nb_var,hs_model,id):     # Permet de créer des fichiers tests.cnf
-    outputFile_hs = open(os.path.join('/home/maena/Documents/Etude/ENS Paris-Saclay/M1/logia/part2/HornSAT/tests/HS/OK/test'+str(nb_var)+'_'+str(id)+'.cnf'),"w")
+    outputFile_hs = open(os.path.join('/home/maena/Documents/Etude/ENS Paris-Saclay/M1/logia/erwann/test_hs/OK/test'+str(nb_var)+'_'+str(id)+'.cnf'),"w")
     outputFile_cnf = open(os.path.join('/home/maena/Documents/Etude/ENS Paris-Saclay/M1/logia/part2/HornSAT/tests/DPLL/OK/test'+str(nb_var)+'_'+str(id)+'.cnf'),"w")
    
 
@@ -119,7 +119,7 @@ def sat_format_horn(nb_var,hs_model,id):     # Permet de créer des fichiers tes
         outputFile_cnf.writelines(cl+"\n")
 
 def unsat_format_horn(nb_var,hs_model,id):     # Permet de créer des fichiers tests.cnf
-    outputFile_hs = open(os.path.join('/home/maena/Documents/Etude/ENS Paris-Saclay/M1/logia/part2/HornSAT/tests/HS/KO/test'+str(nb_var)+'_'+str(id)+'.cnf'),"w")
+    outputFile_hs = open(os.path.join('/home/maena/Documents/Etude/ENS Paris-Saclay/M1/logia/erwann/test_hs/KO/test'+str(nb_var)+'_'+str(id)+'.cnf'),"w")
     outputFile_cnf = open(os.path.join('/home/maena/Documents/Etude/ENS Paris-Saclay/M1/logia/part2/HornSAT/tests/DPLL/KO/test'+str(nb_var)+'_'+str(id)+'.cnf'),"w")
    
 
@@ -145,6 +145,7 @@ for i in range(1,MAX_VAR+1):
         sat_format_horn(i,sat_random_horn(i),id_test)
 """
 
+"""
 for i in range(1,100):
     test_1 = random.randint(0,1)   # On ne fait pas des tests forcément pour chaque nombre de variables.
     test_2 = random.randint(0,1)
@@ -152,4 +153,10 @@ for i in range(1,100):
     test_4 = random.randint(0,1)
     nb_test = random.randint(0,3)       # Combien de tests on fait pour ce nombre.
     for id_test in range(test_1*test_2*test_3*test_4*nb_test):
+        unsat_format_horn(i,unsat_random_horn(i),id_test)
+"""
+
+for i in range(1,1000,10):
+    for id_test in range(3):
+        sat_format_horn(i,sat_random_horn(i),id_test)
         unsat_format_horn(i,unsat_random_horn(i),id_test)

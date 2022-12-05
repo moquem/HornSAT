@@ -1,4 +1,5 @@
 open Dpll
+open Ast
 
 type execution_mode =
   | Cnf (** Solve a formula *)
@@ -13,6 +14,16 @@ module S = Dpll.DPLL(Dpll.DefaultChoice)
 let rec pretty_print = function
   | [] -> print_string "\n"
   | h::q -> print_int h; print_string " "; pretty_print q
+
+let rec pretty_print_tree deep = function
+  | Nil -> print_string "_"
+  | Node(l,0,Nil,0,Nil) -> print_string "conflit lors de l'assignation des singletons: "; pretty_print l
+  | Node(l,v1,t1,v2,t2) -> print_string("-> assignation unit clauses: ");  
+                          pretty_print l; 
+                          for i=0 to deep*3 do print_string "-" done; 
+                          print_string "deep:"; print_int deep; print_string " first choice: "; print_int v1; print_string " "; pretty_print_tree (deep+1) t1; 
+                          for i=0 to deep*3 do print_string "-" done; 
+                          print_string "deep:"; print_int deep; print_string " second choice: "; print_int v2; print_string " "; pretty_print_tree (deep+1) t2
 
 (** Handle files given on the command line *)
 let handle_file : string -> unit = fun fname ->
@@ -33,7 +44,7 @@ let handle_file : string -> unit = fun fname ->
       | 1 -> 
         begin
           match S.solve_xnf p with
-          | None, t -> Format.printf "false@."
+          | None, t -> pretty_print_tree 0 t; print_string "\n"; Format.printf "false@."
           | Some lvar, _ -> pretty_print lvar; Format.printf "true@."
         end
       | 2 -> 

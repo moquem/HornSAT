@@ -6,7 +6,7 @@ type model = int list
 
 type 'a tree = 
     | Nil
-    | Node of 'a list*('a tree)*('a tree) 
+    | Node of 'a list* 'a * ('a tree) * 'a * ('a tree) 
 
 module Clause = Set.Make(struct type t = lit let compare = compare end)
 

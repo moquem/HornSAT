@@ -113,7 +113,7 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
       (* Avec remove_lvar_clause_xnf on supprime les occurences des variables *)
 
       (* On regarde s'il y a un conflit *)
-      if !unsat || conflit !l_sgl then (None, Node(!l_sgl, Nil, Nil))
+      if !unsat || conflit !l_sgl then (None, Node(!l_sgl, 0, Nil, 0, Nil))
       else
 
       match Cnf.choose_opt !xnf with
@@ -135,7 +135,7 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
                             let xnf7 = Cnf.filter (fun elt -> not(Clause.is_empty elt)) xnf6 in
                             let second_cnf = {nb_var = new_xnf.nb_var; nb_clause = Cnf.cardinal xnf7; cnf = xnf7; typ = p.typ} in
                             match solve_xnf second_cnf with
-                              | (None, t2) -> (None, Node(!l_sgl, t1, t2)) (* Avec cette valuation, ce n'est pas non plus satisfiable *)
+                              | (None, t2) -> (None, Node(!l_sgl, new_var, t1, second_var, t2)) (* Avec cette valuation, ce n'est pas non plus satisfiable *)
                               | (Some l, _) -> (Some (second_var::((!l_sgl)@l)), Nil) (* Satisfiable, on retourne *)
                             )
                           | (Some l, _) -> (Some (new_var::(!l_sgl@l)), Nil) (* Satisfiable, on retourne simplement *)
@@ -170,13 +170,13 @@ let rec solve : Ast.t -> Ast.model option = fun p ->
     | [] -> print_string "\n"
     | h::q -> print_int h; print_string " "; pretty_print q
 
-  and pretty_print_as_column = function
+  (* and pretty_print_as_column = function
      | [] -> print_string "\n"
      | hd::tl -> print_int hd ; print_string "\n  |  \n \n" ; pretty_print tl
 
   and pretty_print_tree = function
     | Nil -> print_string "\n"
-    | Node(l,t1,t2) -> pretty_print_as_column l ; 
+    | Node(l,t1,t2) -> pretty_print_as_column l ; *)
 
   (* HornSAT *)
 

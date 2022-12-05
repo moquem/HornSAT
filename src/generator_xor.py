@@ -139,4 +139,14 @@ for i in range(1,1000):
     test_4 = random.randint(0,1)
     nb_test = random.randint(0,3)       # Combien de tests on fait pour ce nombre. 
     for id_test in range(test_1*test_2*test_3*test_4*nb_test):
+        sat_format_xor(i,sat_random_xor(i),id_test)
+
+
+for i in range(1,1000):
+    test_1 = random.randint(0,1)   # On ne fait pas des tests forcément pour chaque nombre de variables.
+    test_2 = random.randint(0,1)
+    test_3 = random.randint(0,1)
+    test_4 = random.randint(0,1)
+    nb_test = random.randint(0,3)       # Combien de tests on fait pour ce nombre. 
+    for id_test in range(test_1*test_2*test_3*test_4*nb_test):
         unsat_format_xor(i,unsat_random_xor(i),id_test)

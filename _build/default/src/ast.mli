@@ -10,7 +10,7 @@ type model = int list
 (** Trace pour xor. *)
 type 'a tree = 
   | Nil
-  | Node of 'a list*('a tree)*('a tree) 
+  | Node of 'a list* 'a * ('a tree)* 'a * ('a tree) 
 
 (** A set of variables *)
 module Clause : Set.S with type elt = var
